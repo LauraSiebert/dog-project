@@ -14,14 +14,13 @@ function watchForm() {
     });
   }
 
-function getDogImage(dogBreed, callback){
-    console.log(`User entered ${dogBreed}.`)
-    let photoDetails = {
-        url:`https://dog.ceo/api/breed/${dogBreed}/images`,
-        dataType: 'json',
-        success: callback,
-      }
-    $.ajax(photoDetails);
+  function getDogImage(dogBreed) {
+    console.log(`User entered ${dogBreed}.`);
+    fetch(`https://dog.ceo/api/breed/${dogBreed}/images`)
+      .then(response => response.json())
+      .then(responseJson => 
+        displayResults(responseJson))
+      .catch(error => alert(`Something went wrong. Please try again.`));
 }
 
 function displayResults(info) {
@@ -29,11 +28,10 @@ function displayResults(info) {
     console.log(`Printing results: ${photo}`);
     console.log(`Status of request: ${info.status}`);
     $('.results').removeClass('hidden');
-    $('.photo-results').html(`<h1>Check out this dog!</h1>`);
     if (info.status == "success"){
-        return $('.photo-results').append(`<img src=${photo} class="results-img">`);
+        return $('.photo-results').html(`<h1>Check out this dog!</h1>`).append(`<img src=${photo} class="results-img">`);
     } else {
-        alert("That breed isn't avaliable. Please try again. ");
+        return alert("That dog breed isn't available. Please try a different selection.");
       }
 }
 
